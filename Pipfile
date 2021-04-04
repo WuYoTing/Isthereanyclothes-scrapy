@@ -5,6 +5,10 @@ name = "pypi"
 
 [packages]
 scapy = "*"
+requests = "*"
+beautifulsoup4 = "*"
+lxml = "*"
+scrapy = "*"
 
 [dev-packages]
 
