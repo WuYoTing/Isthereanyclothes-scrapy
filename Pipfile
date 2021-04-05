@@ -9,6 +9,7 @@ requests = "*"
 beautifulsoup4 = "*"
 lxml = "*"
 scrapy = "*"
+fake-useragent = "*"
 
 [dev-packages]
 
