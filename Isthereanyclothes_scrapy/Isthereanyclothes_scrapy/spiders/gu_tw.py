@@ -7,6 +7,14 @@ from bs4 import BeautifulSoup
 class GuTwSpider(scrapy.Spider):
     name = 'gu-tw'
 
+    # set custom settings
+    custom_settings = {
+        'DEFAULT_REQUEST_HEADERS': {
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            'Accept-Language': 'zh-TW,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6',
+        }
+    }
+
     def __init__(self):
         self.man = '001'
         self.woman = '002'
