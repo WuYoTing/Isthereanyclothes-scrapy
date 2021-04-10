@@ -90,4 +90,4 @@ DOWNLOADER_MIDDLEWARES = {
 # HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
 
 # LOG_LEVEL
-LOG_LEVEL = 'ERROR'
+LOG_LEVEL = 'WARNING'
