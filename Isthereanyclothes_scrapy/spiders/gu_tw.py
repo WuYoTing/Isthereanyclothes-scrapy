@@ -101,20 +101,44 @@ class GuTwSpider(scrapy.Spider):
         json_resp = response.json()
         if json_resp['GoodsInfo']:
             # 初始化item
-            clothes_item = items.ClothesItem()
-            clothes_images_item = items.ClothesImagesItem()
             clothes_sale_tag_item = items.ClothesSaleTagItem()
-            clothes_price_log_item = items.ClothesPriceLogItem()
-            # collect clothes data
-            clothes_item['name'] = json_resp['GoodsInfo']['goods']['goodsNm']
-            clothes_item['sex'] = sex
-            clothes_item['brand_id'] = 1
-            clothes_item['prod_number'] = json_resp['GoodsInfo']['goods']['l1GoodsCd']
-            clothes_item['description'] = json_resp['GoodsInfo']['goods']['dtlExp']
-            clothes_item['material'] = json_resp['GoodsInfo']['goods']['materialInfo']
-            clothes_item['url'] = self.gu_base_url + 'goods/' + json_resp['GoodsInfo']['goods'][
-                'l1GoodsCd']
-            clothes_item['size_url'] = self.gu_base_url + "support/size/" + \
-                                       json_resp['GoodsInfo']['goods']['l1GoodsCd'] + "_size.html"
-            print(clothes_item)
 
+            clothes_info = json_resp['GoodsInfo']['goods']
+            prod_number = clothes_info['l1GoodsCd']
+            image_base_url = clothes_info['httpsImgDomain'] + '/goods/' + prod_number
+            clothes_disp_prod_num = clothes_info['dispL2GoodsKey']
+            clothes_disp_prod_info = clothes_info['dispL2GoodsKey'][clothes_disp_prod_num][
+                'L2GoodsInfo']
+
+            # collect clothes data
+            clothes_item = items.ClothesItem()
+            clothes_item['prod_number'] = prod_number
+            clothes_item['brand_id'] = 2
+            clothes_item['sex'] = sex
+            clothes_item['name'] = clothes_info['goodsNm']
+            clothes_item['description'] = clothes_info['dtlExp']
+            clothes_item['material'] = clothes_info['materialInfo']
+            clothes_item['url'] = self.gu_base_url + 'goods/' + prod_number
+            # if 999 in sizeInfoList this prod is unmeasured
+            if '999' not in clothes_info['sizeInfoList']:
+                clothes_item[
+                    'size_url'] = self.gu_base_url + "support/size/" + prod_number + "_size.html"
+            else:
+                clothes_item['size_url'] = ''
+                print(clothes_item)
+
+            # collect clothes price data
+            clothes_price_log_item = items.ClothesPriceLogItem()
+            clothes_price_log_item['prod_number'] = prod_number
+            clothes_price_log_item['price'] = clothes_disp_prod_info['cSalesPrice']
+
+            # collect clothes main images data
+            clothes_images_main_item = items.ClothesImagesItem()
+            clothes_images_main_item['prod_number'] = prod_number
+            clothes_images_main_item['type'] = 'main'
+            clothes_images_main_item['url'] = image_base_url + '/item/' + clothes_disp_prod_info[
+                'colorCd'] + '_' + prod_number + '.jpg'
+
+            # collect clothes sub images data
+            sub_imges = clothes_info['goodsSubImageList']
+            sub_imges_list = sub_imges.split(';')

@@ -24,10 +24,12 @@ class ClothesItem(Item):
 
 
 class ClothesPriceLogItem(Item):
+    prod_number = Field()
     price = Field()
 
 
 class ClothesImagesItem(Item):
+    prod_number = Field()
     type = Field()
     url = Field()
 
