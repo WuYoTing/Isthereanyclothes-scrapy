@@ -11,3 +11,8 @@ from itemadapter import ItemAdapter
 class IsthereanyclothesScrapyPipeline:
     def process_item(self, item, spider):
         return item
+
+
+class RawInsertPipeline:
+    def process_item(self, item, spider):
+        return item
