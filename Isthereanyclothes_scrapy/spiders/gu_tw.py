@@ -140,5 +140,15 @@ class GuTwSpider(scrapy.Spider):
                 'colorCd'] + '_' + prod_number + '.jpg'
 
             # collect clothes sub images data
+            clothes_images_sub_items = []
             sub_imges = clothes_info['goodsSubImageList']
             sub_imges_list = sub_imges.split(';')
+            for sub_imges in sub_imges_list:
+                clothes_images_sub_item = items.ClothesImagesItem()
+                clothes_images_main_item['prod_number'] = prod_number
+                clothes_images_main_item['type'] = 'sub'
+                clothes_images_main_item['url'] = image_base_url + '/sub/' + sub_imges + '.jpg'
+                clothes_images_sub_items.append(clothes_images_sub_item)
+
+            # collect clothes prod status data
+
