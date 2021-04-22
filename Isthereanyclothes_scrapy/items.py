@@ -34,11 +34,10 @@ class ClothesImagesItem(Item):
     url = Field()
 
 
-class ClothesProdStatusItem(Item):
+class ClothesStatusItem(Item):
     prod_number = Field()
     is_new_prod = Field()
     is_online_only = Field()
-    is_set = Field()
     is_limited_time = Field()
     is_price_down = Field()
     can_modify = Field()

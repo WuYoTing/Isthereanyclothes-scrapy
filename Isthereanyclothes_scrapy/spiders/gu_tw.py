@@ -1,6 +1,7 @@
 import random
 import math
 import scrapy
+import datetime
 from bs4 import BeautifulSoup
 
 import Isthereanyclothes_scrapy.items as items
@@ -98,6 +99,7 @@ class GuTwSpider(scrapy.Spider):
                     )
 
     def get_product_info(self, response, sex):
+        now = datetime.datetime.now()
         json_resp = response.json()
         if json_resp['GoodsInfo']:
             # 初始化item
@@ -151,4 +153,16 @@ class GuTwSpider(scrapy.Spider):
                 clothes_images_sub_items.append(clothes_images_sub_item)
 
             # collect clothes prod status data
-
+            clothes_status_item = items.ClothesStatusItem()
+            clothes_status_item['prod_number'] = prod_number
+            clothes_status_item['is_new_prod'] = clothes_info['newFlg']
+            clothes_status_item['is_online_only'] = clothes_info['onlineLimitFlg']
+            clothes_status_item['is_limited_time'] = clothes_disp_prod_info['termLimitSalesFlg']
+            clothes_status_item['is_price_down'] = clothes_disp_prod_info['discountFlg']
+            clothes_status_item['can_modify'] = 0
+            prod_limited_price_text = clothes_disp_prod_info[
+                'termLimitSalesEndMsg'
+            ].split('止期間限定特價中')[0]
+            prod_limited_price_month_day = prod_limited_price_text.replace('/', '-')
+            clothes_status_item['is_limited_time'] = str(
+                now.year) + '-' + prod_limited_price_month_day
